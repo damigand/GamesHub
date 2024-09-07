@@ -1,3 +1,127 @@
+.rps {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    font-size: 1.1em;
+    width: 100%;
+    align-items: center;
+}
+
+.score {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--light);
+    padding: 15px;
+    max-width: 500px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: white;
+        box-shadow: 0px 0px 25px 1px rgba(255, 255, 255, 0.2);
+        border: 1px solid white;
+    }
+}
+
+.player-icon,
+.ai-icon {
+    display: flex;
+    flex-direction: column;
+}
+
+.numbers {
+    display: flex;
+    gap: 50px;
+}
+
+.score img {
+    max-width: 60px;
+}
+
+.container {
+    container: options / size;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.options {
+    width: 95%;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: minmax(50px, 200px);
+    gap: 25px;
+}
+
+@container options (min-width: 500px) {
+    .options {
+        grid-template-columns: repeat(3, minmax(50px, 200px));
+    }
+}
+
+.options > div {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: white;
+        box-shadow: 0px 0px 25px 1px rgba(255, 255, 255, 0.2);
+        border: 1px solid white;
+    }
+}
+
 .options img {
-    max-width: 150px;
+    height: 25px;
+}
+
+.game {
+    padding: 0px 10px;
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    max-width: 500px;
+}
+
+.game > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.game img {
+    max-width: 80px;
+}
+
+.play {
+    font-size: 1.15em;
+    align-self: center;
+    padding: 3px 15px;
+    background: transparent;
+    border: 1px solid var(--light);
+    color: var(--light);
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+        color: white;
+        box-shadow: 0px 0px 25px 1px rgba(255, 255, 255, 0.2);
+        border: 1px solid white;
+    }
+}
+
+@media (max-width: 500px) {
+    .score img {
+        height: 50px;
+    }
+
+    .numbers {
+        gap: 15px;
+    }
 }
