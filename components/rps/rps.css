@@ -116,6 +116,18 @@
     }
 }
 
+.win {
+    color: lightgreen;
+}
+
+.loss {
+    color: lightcoral;
+}
+
+.tie {
+    color: yellow;
+}
+
 @media (max-width: 500px) {
     .score img {
         height: 50px;
