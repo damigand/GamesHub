@@ -1,4 +1,5 @@
 import "./rps.css";
+import { backButton } from "@c/backButton/back.js";
 
 const optionData = {
     scissors: ["../scissors.png", "Scissors"],
@@ -20,6 +21,7 @@ const $$ = (el) => document.querySelectorAll(el);
 
 export async function rpsGame() {
     const [playerScore, iaScore] = await loadScore();
+    $("body").appendChild(backButton());
     return `
         <h1>Rock, Paper, Scissors</h1>
         <div class="rps">
@@ -102,6 +104,7 @@ export function rpsEvents() {
             message.classList.remove("tie");
             message.classList.remove("win");
             message.classList.remove("loss");
+            message.classList.remove("warning");
             message.textContent = "";
         });
     });
@@ -111,8 +114,15 @@ export function rpsEvents() {
 }
 
 function rpsPlay() {
-    if (!selectedOption) return;
-
+    if (!selectedOption) {
+        const message = $(".message");
+        message.classList.remove("tie");
+        message.classList.remove("win");
+        message.classList.remove("loss");
+        message.classList.add("warning");
+        message.textContent = "You need to choose an option!";
+        return;
+    }
     //Obtengo la opción aleatoria de la ia
     const random = Math.floor(Math.random() * 3 + 1);
 

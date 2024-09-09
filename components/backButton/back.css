@@ -1,0 +1,14 @@
+.back img {
+    width: 35px;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid var(--light);
+    padding: 5px;
+
+    &:hover {
+        box-shadow: 0px 0px 25px 1px rgba(255, 255, 255, 0.2);
+    }
+}
