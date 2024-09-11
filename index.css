@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 :root {
     --primary: #415a77;
@@ -12,7 +12,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -28,13 +28,10 @@ body:has(#app) {
     align-items: center;
 }
 
-body:has(#game) {
-    padding-top: 75px;
-}
-
 #game {
     width: 100%;
     max-width: 600px;
+    position: relative;
 }
 
 #app {

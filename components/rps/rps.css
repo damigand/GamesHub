@@ -41,7 +41,7 @@
 }
 
 .container {
-    container: options / size;
+    container: options / inline-size;
     display: flex;
     width: 100%;
     justify-content: center;

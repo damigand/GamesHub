@@ -1,5 +1,5 @@
 import "./rps.css";
-import { backButton } from "@c/backButton/back.js";
+import { backButton } from "../backButton/back";
 
 const optionData = {
     scissors: ["../scissors.png", "Scissors"],
@@ -21,7 +21,6 @@ const $$ = (el) => document.querySelectorAll(el);
 
 export async function rpsGame() {
     const [playerScore, iaScore] = await loadScore();
-    $("body").appendChild(backButton());
     return `
         <h1>Rock, Paper, Scissors</h1>
         <div class="rps">
@@ -73,7 +72,7 @@ export async function rpsGame() {
     `;
 }
 
-function loadScore() {
+async function loadScore() {
     const playerScore = localStorage.getItem("rpsPlayerScore") || 0;
     const iaScore = localStorage.getItem("rpsIaScore") || 0;
 

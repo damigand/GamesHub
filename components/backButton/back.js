@@ -10,7 +10,13 @@ export function backButton() {
 
     div.appendChild(img);
 
+    const text = document.createElement("span");
+    text.textContent = "Back";
+
+    div.appendChild(text);
+
     div.addEventListener("click", (event) => {
+        console.log("hi");
         window.history.back();
     });
 
