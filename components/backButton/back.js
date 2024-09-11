@@ -16,8 +16,7 @@ export function backButton() {
     div.appendChild(text);
 
     div.addEventListener("click", (event) => {
-        console.log("hi");
-        window.history.back();
+        window.location = "../";
     });
 
     return div;
