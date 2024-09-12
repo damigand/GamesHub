@@ -135,3 +135,7 @@
         border-color: white;
     }
 }
+
+.cells .winner {
+    background-color: var(--primary);
+}
