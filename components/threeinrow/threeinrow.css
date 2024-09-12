@@ -84,3 +84,27 @@
         border: 1px solid white;
     }
 }
+
+.hidden {
+    display: none;
+}
+
+.current-turn:not(.hidden) {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--light);
+    padding: 2px 10px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        box-shadow: 0px 0px 25px 1px rgba(255, 255, 255, 0.2);
+        color: white;
+        border-color: white;
+    }
+}
+
+.current-turn img {
+    height: 50px;
+}
