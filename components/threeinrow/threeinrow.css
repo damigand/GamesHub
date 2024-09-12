@@ -108,3 +108,30 @@
 .current-turn img {
     height: 50px;
 }
+
+.result:not(.hidden) {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+.result img {
+    height: 100%;
+    max-height: 50px;
+}
+
+.restart {
+    background: none;
+    color: var(--light);
+    border: 1px solid var(--light);
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        box-shadow: 0px 0px 25px 1px rgba(255, 255, 255, 0.2);
+        color: white;
+        border-color: white;
+    }
+}
