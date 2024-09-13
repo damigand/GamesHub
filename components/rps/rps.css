@@ -8,38 +8,6 @@
     align-items: center;
 }
 
-.score {
-    width: 95%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid var(--light);
-    padding: 15px;
-    max-width: 500px;
-    transition: all 0.2s ease;
-
-    &:hover {
-        color: white;
-        box-shadow: 0px 0px 25px 1px rgba(255, 255, 255, 0.2);
-        border: 1px solid white;
-    }
-}
-
-.player-icon,
-.ai-icon {
-    display: flex;
-    flex-direction: column;
-}
-
-.numbers {
-    display: flex;
-    gap: 50px;
-}
-
-.score img {
-    max-width: 60px;
-}
-
 .container {
     container: options / inline-size;
     display: flex;
@@ -83,6 +51,7 @@
 }
 
 .game {
+    margin-top: 25px;
     padding: 0px 10px;
     width: 95%;
     display: flex;

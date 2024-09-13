@@ -1,10 +1,11 @@
 import './threeinrow.css';
+import { score, updateScore, loadScore } from '@c/score/score.js';
 
 const $ = (el) => document.querySelector(el);
 const $$ = (el) => document.querySelectorAll(el);
 
 export async function threeinrowGame() {
-    const [scoreCross, scoreCircle] = await loadScore();
+    const [scoreCross, scoreCircle] = await loadScore('scoreCross', 'scoreCircle');
     const [savedGame, savedTurn, savedCounter] = await loadSavedGame();
     currentTurn = savedTurn;
     turnCounter = savedCounter;
@@ -12,7 +13,7 @@ export async function threeinrowGame() {
     return `
         <h1>Three in a row</h1>
         <div class="threeinrow">
-            ${threeinrowScore(scoreCross, scoreCircle)}
+            ${score('P1', '../cross.png', scoreCross, 'P2', '../circle.png', scoreCircle)}
             ${threeinrowCells(savedGame)} 
             ${threeinrowOptions()}
             ${threeinrowTurns(savedTurn, savedCounter)}
@@ -31,36 +32,6 @@ async function loadSavedGame() {
     var turnCounter = localStorage.getItem('turnCounter') || 0;
     turnCounter = Number(turnCounter);
     return [savedGame, savedTurn, turnCounter];
-}
-
-async function loadScore() {
-    var scoreCross = localStorage.getItem('scoreCross') || 0;
-    scoreCross = Number(scoreCross);
-
-    var scoreCircle = localStorage.getItem('scoreCircle') || 0;
-    scoreCircle = Number(scoreCircle);
-
-    return [scoreCross, scoreCircle];
-}
-
-function threeinrowScore(scoreCross, scoreCircle) {
-    return `
-        <div class="score">
-            <div class="player-icon">
-                <span>P1</span>
-                <img src="../cross.png" alt="player icon" />
-            </div>
-            <div class="numbers">
-                <span class="player-score">${scoreCross}</span>
-                <span>-</span>
-                <span class="player2-score">${scoreCircle}</span>
-            </div>
-            <div class="player2-icon">
-                <span>P2</span>
-                <img src="../circle.png" alt="player 2 icon" />
-            </div>
-        </div>
-    `;
 }
 
 function threeinrowCells(game) {
@@ -283,19 +254,13 @@ function endGame(result) {
         case 'x':
             text.textContent = 'Cross wins!';
             img.src = '../cross.png';
-            score = localStorage.getItem('scoreCross') || 0;
-            newScore = Number(score) + 1;
-            localStorage.setItem('scoreCross', JSON.stringify(newScore));
-            $('.player-score').textContent = newScore;
+            updateScore('scoreCross', 'player');
             break;
 
         case 'o':
             text.textContent = 'Circle wins!';
             img.src = '../circle.png';
-            score = localStorage.getItem('scoreCircle') || 0;
-            newScore = Number(score) + 1;
-            localStorage.setItem('scoreCircle', JSON.stringify(newScore));
-            $('.player2-score').textContent = newScore;
+            updateScore('scoreCircle', 'player2');
             break;
     }
 
