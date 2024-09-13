@@ -5,16 +5,18 @@ const $$ = (el) => document.querySelectorAll(el);
 
 export async function threeinrowGame() {
     const [scoreCross, scoreCircle] = await loadScore();
-    const [savedGame, savedTurn] = await loadSavedGame();
+    const [savedGame, savedTurn, savedCounter] = await loadSavedGame();
     currentTurn = savedTurn;
+    turnCounter = savedCounter;
+
     return `
         <h1>Three in a row</h1>
         <div class="threeinrow">
             ${threeinrowScore(scoreCross, scoreCircle)}
-            ${threeinrowCells(savedGame)}
+            ${threeinrowCells(savedGame)} 
             ${threeinrowOptions()}
-            ${threeinrowTurns(savedTurn)}
-            ${threeinrowResult()}
+            ${threeinrowTurns(savedTurn, savedCounter)}
+            ${threeinrowResult(savedCounter)}
         </div>
     `;
 }
@@ -26,8 +28,9 @@ async function loadSavedGame() {
     if (winningCells) winningCellIndexes = JSON.parse(winningCells);
 
     const savedTurn = winningCellIndexes.length > 0 ? null : localStorage.getItem('savedTurn');
-
-    return [savedGame, savedTurn];
+    var turnCounter = localStorage.getItem('turnCounter') || 0;
+    turnCounter = Number(turnCounter);
+    return [savedGame, savedTurn, turnCounter];
 }
 
 async function loadScore() {
@@ -119,9 +122,9 @@ function threeinrowOptions() {
     `;
 }
 
-function threeinrowTurns(savedTurn) {
-    //Si habia un turno guardado, lo carga visualmente.
-    if (savedTurn && winningCellIndexes.length < 1) {
+function threeinrowTurns(savedTurn, turnCounter) {
+    //Si habia un turno guardado y no hay un ganador, cargo el turno.
+    if (savedTurn && winningCellIndexes.length < 1 && turnCounter < 9) {
         return `
             <div class="current-turn">
                 <span>Current turn</span>
@@ -138,9 +141,20 @@ function threeinrowTurns(savedTurn) {
     `;
 }
 
-function threeinrowResult() {
+function threeinrowResult(turnCounter) {
     var text = '';
     var src = '';
+
+    //Si no hay celda ganadora pero los turnos son los máximos permitidos, es un empate.
+    if (turnCounter > 8 && winningCellIndexes.length < 1) {
+        return `
+            <div class="result">
+                <span>It's a tie!</span>
+                <img src="" alt="" />
+                <button class="restart">Play again</button>
+            </div>
+        `;
+    }
 
     if (winningCellIndexes.length > 0) {
         //Uso un check para identificar el ganador de la partida guardada, dado el caso
@@ -211,9 +225,11 @@ export function threeinrowEvents() {
             }
 
             //si el turno es X, cambia a O. Si no es X, cambia a X.
+            //Guardo el turno y el contador.
             currentTurn = currentTurn == 'x' ? 'o' : 'x';
             turnCounter++;
             localStorage.setItem('savedTurn', currentTurn);
+            localStorage.setItem('turnCounter', turnCounter);
 
             //Si el juego llega a 9 turnos y no se ha determinado un ganador, hay empate.
             if (turnCounter > 8) {
@@ -263,6 +279,7 @@ function endGame(result) {
             text.textContent = "It's a tie!";
             img.src = '';
             break;
+
         case 'x':
             text.textContent = 'Cross wins!';
             img.src = '../cross.png';
@@ -271,6 +288,7 @@ function endGame(result) {
             localStorage.setItem('scoreCross', JSON.stringify(newScore));
             $('.player-score').textContent = newScore;
             break;
+
         case 'o':
             text.textContent = 'Circle wins!';
             img.src = '../circle.png';
@@ -317,6 +335,7 @@ function resetGame() {
     localStorage.setItem('savedGameTIR', JSON.stringify(savedGame));
     localStorage.setItem('savedTurn', '');
     localStorage.setItem('winningCells', '');
+    localStorage.setItem('turnCounter', 0);
 }
 
 const winCombinations = ['123', '456', '789', '147', '258', '369', '159', '357'];
@@ -358,6 +377,8 @@ async function checkWin() {
             winningCellIndexes.push(secondIndex);
             winningCellIndexes.push(thirdIndex);
 
+            //Guardo los index de las celdas para poder cargar el caso específico en el que
+            //la última partida guardada en el navegador tenga un ganador ya establecido.
             localStorage.setItem('winningCells', JSON.stringify(winningCellIndexes));
             return true;
         }
