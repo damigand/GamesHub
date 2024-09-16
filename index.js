@@ -15,9 +15,9 @@ app.innerHTML = `
                 <h3>Three in a row</h3>
             </li>
         </a>
-        <a href="games/cards.html" class="play">
+        <a href="games/mines.html" class="play">
             <li>
-                <h3>Matching cards</h3>
+                <h3>Mines</h3>
             </li>
         </a>
     </ul>
