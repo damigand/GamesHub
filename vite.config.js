@@ -8,4 +8,14 @@ export default defineConfig({
             "@c": path.resolve(__dirname, "./components/"),
         },
     },
+    build: {
+        rollupOptions: {
+            input: {
+                main: resolve(__dirname, "index.html"),
+                mines: resolve(__dirname, "./pages/mines.html"),
+                rps: resolve(__dirname, "./pages/rps.html"),
+                threeinrow: resolve(__dirname, "./pages/threeinrow.html"),
+            },
+        },
+    },
 });

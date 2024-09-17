@@ -1,6 +1,6 @@
 const $ = (el) => document.querySelector(el);
 
-const app = $('#app');
+const app = $("#app");
 
 app.innerHTML = `
     <h1>Choose a game</h1>
