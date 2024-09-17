@@ -12,9 +12,9 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: path.resolve(__dirname, "index.html"),
-                mines: path.resolve(__dirname, "./pages/mines.html"),
-                rps: path.resolve(__dirname, "./pages/rps.html"),
-                threeinrow: path.resolve(__dirname, "./pages/threeinrow.html"),
+                mines: path.resolve(__dirname, "./games/mines.html"),
+                rps: path.resolve(__dirname, "./games/rps.html"),
+                threeinrow: path.resolve(__dirname, "./games/threeinrow.html"),
             },
         },
     },
