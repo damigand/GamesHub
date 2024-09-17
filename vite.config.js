@@ -11,10 +11,10 @@ export default defineConfig({
     build: {
         rollupOptions: {
             input: {
-                main: resolve(__dirname, "index.html"),
-                mines: resolve(__dirname, "./pages/mines.html"),
-                rps: resolve(__dirname, "./pages/rps.html"),
-                threeinrow: resolve(__dirname, "./pages/threeinrow.html"),
+                main: path.resolve(__dirname, "index.html"),
+                mines: path.resolve(__dirname, "./pages/mines.html"),
+                rps: path.resolve(__dirname, "./pages/rps.html"),
+                threeinrow: path.resolve(__dirname, "./pages/threeinrow.html"),
             },
         },
     },
