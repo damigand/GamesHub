@@ -14,21 +14,26 @@ export function mineGame() {
 }
 
 export function mineEvents() {
+    //Controla el aspecto visual y comienza el juego al
+    //Darle click a play.
     const play = $(".play");
     play.addEventListener("click", async () => {
+        //Genera las bombas.
         const mines = await generateMines();
         if (!mines) return;
-
         playing = true;
 
+        //Actualiza los datos y la parte visual.
         updateGameInfo(mines, 25 - mines);
         $(".controls").classList.add("hidden");
         $(".game-info").classList.remove("hidden");
     });
 
+    //Permite reiniciar la partida cuando acaba.
     const restart = $(".play-again");
     restart.addEventListener("click", () => restartGame());
 
+    //Permite ver todas las celdas cuando termina la partida.
     const seeAll = $(".see-all");
     seeAll.addEventListener("click", () => seeAllCells());
 
@@ -42,16 +47,31 @@ export function mineEvents() {
             const col = cell.getAttribute("col");
 
             const gameCell = currentGame.find((c) => c.row == row && c.col == col);
+
+            //Si la celda clicada está vista, retorna.
+            if (gameCell.seen) return;
+
+            //Si es bomba, lo pinta y termina el juego.
             if (gameCell.value == "bomb") {
                 cell.querySelector("img").src = "../bomb.png";
                 cell.classList.add("bomb");
 
-                endGame();
+                endGame("lose");
             } else {
+                //Si no, pinta el check.
                 cell.querySelector("img").src = "../check.png";
                 updateGameInfo(currentMines, checksLeft - 1);
             }
+
+            //Actualiza la celda tanto en el juego como visualmente.
             cell.classList.add("seen");
+            gameCell.seen = true;
+
+            //Si no quedan checks por descubrir, el jugador gana.
+            //un "check" es una celda sin bomba.
+            if (checksLeft < 1) {
+                endGame("win");
+            }
         });
     });
 }
@@ -60,13 +80,19 @@ var currentGame = [];
 var playing = false;
 
 async function generateMines() {
+    //Si el numero introducido es igual o mayor
+    //al numero de celdas, no deja iniciar el juego.
     const number = $("#bomb-number").value;
     if (!number || number > 24) return;
 
+    //Pinta las bombas en celdas aleatorias.
     for (var a = 0; a < number; a++) {
+        //Genera las coordenadas aleatorias.
         const randomRow = Math.floor(Math.random() * 5 + 1);
         const randomCol = Math.floor(Math.random() * 5 + 1);
 
+        //Si la celda ya tenía bomba, resta 1 al "loop"
+        //Para que pinte otra.
         const bombCell = currentGame.find((cell) => cell.row == randomRow && cell.col == randomCol);
         if (bombCell.value == "bomb") {
             a--;
@@ -75,12 +101,31 @@ async function generateMines() {
         }
     }
 
+    //Por ultimo retorna el numero de bombas.
     return number;
+}
+
+function seeAllCells() {
+    const cells = $$(".cell");
+
+    //Por cada celda pinta lo que tiene.
+    cells.forEach((cell) => {
+        const col = cell.getAttribute("col");
+        const row = cell.getAttribute("row");
+        const gameCell = currentGame.find((c) => c.row == row && c.col == col);
+
+        if (gameCell.value == "bomb") {
+            cell.querySelector("img").src = "../bomb.png";
+        } else {
+            cell.querySelector("img").src = "../check.png";
+        }
+    });
 }
 
 function mineCells() {
     var cells = "";
 
+    //Pinta las celdas y las introduce en el currentGame.
     for (var row = 1; row < 6; row++) {
         for (var col = 1; col < 6; col++) {
             cells += `
@@ -89,7 +134,7 @@ function mineCells() {
                 </div>
             `;
 
-            currentGame.push({ row: row, col: col, value: "empty" });
+            currentGame.push({ row: row, col: col, value: "empty", seen: false });
         }
     }
     return `
@@ -123,10 +168,11 @@ function gameInfo() {
 function message() {
     return `
         <div class="message hidden">
-            <span class="loss">Has perdido!</span>
+            <span class="title"></span>
             <div class="end-info">
-                <span>Bombs: 20</span>
-                <span>Checks left: 2</span>
+                <span class="bombs"></span>
+                <span class="checks-left"></span>
+                <span class="checks-done"></span>
             </div>
             <div class="buttons">
                 <button class="play-again">TRY AGAIN</button>
@@ -140,6 +186,8 @@ var currentMines = 0;
 var checksLeft = 0;
 
 function updateGameInfo(mines, checks) {
+    //Actualiza los datos visualmente para que el usuario sepa
+    //Cómo va.
     currentMines = mines;
     checksLeft = checks;
 
@@ -147,18 +195,42 @@ function updateGameInfo(mines, checks) {
     $(".info-checks").textContent = "Checks to win: " + checksLeft;
 }
 
-function endGame() {
+function endGame(state) {
+    //Cambia la variable "playing" para que no pueda descubrir
+    //más celdas.
     playing = false;
     $(".game-info").classList.add("hidden");
-    $(".message").classList.remove("hidden");
+    const message = $(".message");
+
+    //Pinta todo el mensaje final.
+    const title = message.querySelector(".title");
+    const bombs = message.querySelector(".bombs");
+    const checks = message.querySelector(".checks-left");
+    const checksDone = message.querySelector(".checks-done");
+
+    message.classList.remove("hidden");
+    bombs.textContent = "Bombs: " + currentMines;
+    checks.textContent = "Left: " + checksLeft;
+    checksDone.textContent = "Cleared: " + (25 - currentMines - checksLeft);
+    if (state == "win") {
+        title.textContent = "You win!";
+        title.classList.remove("lose");
+        title.classList.add("win");
+    } else {
+        title.textContent = "You lose!";
+        title.classList.remove("win");
+        title.classList.add("lose");
+    }
 }
 
 function restartGame() {
+    //Reinicia todas las variables.
     currentMines = 0;
     checksLeft = 0;
 
     const cells = $$(".cell");
 
+    //Reinicia cada celda y su valor en currentGame.
     cells.forEach((cell) => {
         cell.querySelector("img").src = "";
         cell.classList.remove("seen");
@@ -167,8 +239,10 @@ function restartGame() {
 
     currentGame.forEach((cell) => {
         cell.value = "empty";
+        cell.seen = false;
     });
 
+    //Esconde el mensaje y enseña el panel de elegir bombas.
     $(".controls").classList.remove("hidden");
     $(".message").classList.add("hidden");
 }
